@@ -1,115 +1,189 @@
-# 🌌 Nebula Talk – Voice-Controlled Crypto Wallet
+# 🌌 NebulaTalk — Real-Time Chat with Web3 & Voice
 
-![Nebula Talk](https://img.shields.io/badge/Powered%20By-Voice%20%26%20Blockchain-blueviolet?style=for-the-badge)
-
-Nebula Talk is a modern voice-activated smart wallet interface built using React, Web Speech API, and MetaMask. It allows users to **connect, disconnect, check wallet balance, and send ETH** — all through **natural voice commands** in **English and Hindi**.
-This project is build by me as a part of blockdag hackathon .I have tried something new in this project.
----
-
-## 🤖 How Nebula Talk Uses AI
-
-Nebula Talk leverages AI-driven technology to make crypto wallet interactions natural and accessible:
-
-- 🎙️ **Speech Recognition (AI-powered NLP):** Uses the Web Speech API to continuously listen, transcribe, and understand user commands in English and Hindi.
-- 🗣️ **Natural Language Interface:** Maps loosely spoken phrases to structured wallet actions like sending ETH, fetching balance, or connecting accounts.
-- 🌐 **Multilingual Understanding:** Supports both English and Hindi voice inputs using native AI models inside the browser.
-- 🧠 **Intent Recognition:** Parses natural voice phrases into wallet functions using AI-enhanced pattern matching and intelligent regex mapping.
-- 🚀 **Future Extension:** Can be extended with LLMs or AI voice SDKs (e.g., OpenAI Whisper, Google STT, or Alan AI) for richer conversations and multilingual command understanding.
-
-By merging AI with decentralized tech (Web3), Nebula Talk redefines how users interact with crypto wallets — making it **hands-free, intuitive, and voice-first**.
-
-🚀 **Live Demo**: [https://nebula-talk.vercel.app/](https://nebula-talk.vercel.app/)  
-📦 **GitHub Repo**: [github.com/TanmaySingh007/NebulaTalk](https://github.com/TanmaySingh007/NebulaTalk)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Click%20Here-green)](https://nebula-talk.vercel.app/)
+[![Web3 Enabled](https://img.shields.io/badge/Web3-MetaMask-orange)](https://metamask.io/)
+[![Voice Input](https://img.shields.io/badge/Speech-Web%20Speech%20API-blue)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 📌 Features
+## ✨ What is NebulaTalk?
 
-- 🎙️ Voice-activated wallet actions (Web Speech API)
-- 🗣️ Multilingual command support – English & Hindi
-- 🔐 MetaMask Wallet Integration (Ethereum / Polygon)
-- 💸 Send ETH by saying the amount and wallet address
-- 📈 Real-time wallet balance fetch
-- 🧠 Natural speech parsing (Regex-based)
-- 💻 Responsive UI for mobile & desktop (Tailwind CSS)
-- ♻️ Auto restarts voice listening after inactivity
+**NebulaTalk** is a futuristic, real-time chat app that combines WebSockets, Web3, and voice-to-text to offer a sleek and intuitive communication experience.
 
----
+Built with:
+- **Socket.IO** for real-time messaging
+- **MetaMask + Ethers.js** for Ethereum wallet connection
+- **Web Speech API** for voice input support
 
-## 💡 Example Voice Commands
+NebulaTalk lets you:
+- Chat instantly across dynamic rooms
+- Connect your Ethereum wallet (MetaMask)
+- Speak your messages instead of typing
 
-| Command (English)                     | Command (Hindi)                        | Action                          |
-|--------------------------------------|----------------------------------------|---------------------------------|
-| "Connect wallet"                     | "वॉलेट कनेक्ट"                          | Connect to MetaMask             |
-| "Disconnect wallet"                  | "वॉलेट डिस्कनेक्ट"                     | Disconnect wallet               |
-| "Check my balance" / "Show balance"  | "मेरा बैलेंस दिखाओ" / "बैलेंस चेक करो" | Fetch ETH/MATIC balance         |
-| "Send 0.01 ETH to 0x..."             | "0.01 ईटीएच भेजो 0x..."                 | Send ETH to wallet address      |
-| "Show my account"                    | "मेरा अकाउंट दिखाओ"                    | Show connected wallet address   |
+> It's not just a chatroom — it's a glimpse into the future of communication.
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Live Demo
 
-- **Frontend:** React 18 + Vite
-- **Styling:** Tailwind CSS
-- **Wallet Integration:** MetaMask + ethers.js
-- **Voice Engine:** Web Speech API (browser-native)
-- **Deployment:** Vercel
+👉 [nebula-talk.vercel.app](https://nebula-talk.vercel.app/)
+
+Try it live — join a room, connect your wallet, and chat using your voice!
 
 ---
 
-## ⚙️ Setup Instructions
+## 🧰 Tech Stack
 
-``bash
-# 1. Clone the repo
+**Frontend:**  
+- React.js  
+- Vite  
+- Tailwind CSS  
+- Web Speech API  
+- MetaMask Integration  
+- Ethers.js  
+
+**Backend:**  
+- Node.js  
+- Express.js  
+- Socket.IO  
+
+**Hosting:**  
+- Vercel (Frontend + API)
+
+---
+
+## ⚡ Key Features
+
+- 🔄 Real-time messaging with Socket.IO
+- 🧠 Voice-to-text via Web Speech API
+- 🦊 Ethereum wallet connection via MetaMask
+- 🧪 Ethereum address display using Ethers.js
+- 🏠 Room-based system — create or join any room
+- 🎨 Clean, responsive Tailwind UI
+- 💬 Instant, frictionless experience (no auth needed)
+
+---
+
+## 📂 Project Structure
+
+```
+NebulaTalk/
+├── client/         → React + Vite + Tailwind + Web3 + Voice
+│   ├── src/
+│   │   ├── components/
+│   │   └── hooks/ (MetaMask, speech recognition)
+│   └── public/
+│
+├── server/         → Express + Socket.IO
+│   └── index.js
+```
+
+---
+
+## 💻 Run Locally
+
+1. **Clone the repository:**
+
+```bash
 git clone https://github.com/TanmaySingh007/NebulaTalk.git
 cd NebulaTalk
+```
 
-# 2. Install dependencies
+2. **Install dependencies:**
+
+```bash
+cd client
 npm install
 
-# 3. Start the development server
-npm run dev
+cd ../server
+npm install
+```
 
-💡 Make sure MetaMask is installed and connected to Polygon Mumbai Testnet for testing with free MATIC.
+3. **Start the servers:**
 
-📤 Deployment
-Deployed using Vercel:
-# Build for production
-npm run build
+```bash
+cd server
+npm run dev  # Starts backend on http://localhost:5000
 
-# Preview build locally
-npm run preview
+cd ../client
+npm run dev  # Starts frontend on http://localhost:5173
+```
 
-You can fork this and deploy your own version in seconds using Vercel or Netlify.
+4. **Open in browser:**  
+   Visit `http://localhost:5173`
 
-🧠 How It Works
-Uses the Web Speech API to listen for commands continuously
+---
 
-Parses the transcript for keywords and matches via includes() and regex
+## 🦊 Web3 Integration (MetaMask + Ethers.js)
 
-Executes commands like connectWallet(), fetchBalance(), or sendEth() with ethers.js
+- Users can **connect MetaMask** in one click.
+- Ethereum address appears in the chatroom.
+- Internally powered by `ethers.js` for wallet management.
 
-Voice commands are recognized in both English and Hindi
+```js
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const address = await signer.getAddress();
+```
 
-Feedback is shown in a real-time status panel on the UI.
+---
 
-🤝 Acknowledgements
-MetaMask
+## 🎙️ Voice Chat (Web Speech API)
 
-ethers.js
+- Use your **microphone to speak messages**
+- Converts voice → text in real time
+- Powered by `window.SpeechRecognition` API
 
-Vercel
+```js
+const recognition = new window.SpeechRecognition();
+recognition.onresult = (event) => {
+  const transcript = event.results[0][0].transcript;
+  sendMessage(transcript);
+};
+```
 
-Tailwind CSS
+---
 
-Web Speech API
+## 🌐 Deployment
 
-👨‍💻 Author
-Tanmay Singh
-📧 tanmaysingh08580@gmail.com
-🔗 LinkedIn • GitHub
+Deployed on **Vercel**  
+Auto-updates when you push to GitHub.  
+Backend is bundled or proxied based on deployment config.
 
-📃 License
-This project is open-source and free to use under the MIT License.
+---
+
+## 💡 Future Features (Optional Ideas)
+
+- ✅ Typing indicators
+- ✅ Message persistence (Firebase/MongoDB)
+- ✅ Ethereum message signing
+- ✅ Audio/video chat with WebRTC
+- ✅ NFT-based room access
+
+---
+
+## 🤝 Contributing
+
+Pull requests and ideas are welcome!  
+Fork the repo, suggest a feature, or open an issue.
+
+---
+
+## 👨‍🚀 Author
+
+**Tanmay Singh**  
+💼 [LinkedIn](https://linkedin.com/in/tanmaysingh007)  
+🐦 [Twitter](https://twitter.com/tanmaysingh007)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**  
+Free to use, remix, deploy — just give credit.
+
+---
+
+> _“NebulaTalk isn’t just real-time. It’s real-future.”_ 🚀
 
