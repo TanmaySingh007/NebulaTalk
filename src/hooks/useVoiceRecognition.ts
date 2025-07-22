@@ -41,7 +41,7 @@ export const useVoiceRecognition = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [isSupported, setIsSupported] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('en-IN');
+  const [currentLanguage, setCurrentLanguage] = useState('en-US');
   const [lastCommand, setLastCommand] = useState<VoiceCommand | null>(null);
   const [error, setError] = useState('');
   
@@ -51,110 +51,165 @@ export const useVoiceRecognition = () => {
   const lastProcessedRef = useRef<string>('');
   const commandTimeoutRef = useRef<number | null>(null);
 
-  // Enhanced command parsing with better regex patterns
+  // Enhanced multilingual command parsing
   const parseVoiceCommand = useCallback((text: string): VoiceCommand => {
     const lowerText = text.toLowerCase().trim();
     
-    // Skip if same as last processed command (within 2 seconds)
+    // Skip if same as last processed command
     if (lastProcessedRef.current === lowerText) {
       return { type: 'unknown', originalText: text };
     }
     
-    // Connect wallet commands
-    if (
-      lowerText.includes('connect wallet') ||
-      lowerText.includes('connect my wallet') ||
-      lowerText.includes('wallet connect') ||
-      lowerText.includes('connect') ||
-      lowerText.includes('वॉलेट कनेक्ट') ||
-      lowerText.includes('कनेक्ट करो') ||
-      lowerText.includes('कनेक्ट')
-    ) {
+    // Connect wallet commands (multilingual)
+    const connectPatterns = [
+      // English
+      'connect wallet', 'connect my wallet', 'wallet connect', 'connect',
+      // Spanish
+      'conectar billetera', 'conectar cartera', 'conectar',
+      // German
+      'wallet verbinden', 'verbinden', 'geldbörse verbinden',
+      // Portuguese
+      'conectar carteira', 'conectar', 'ligar carteira',
+      // French
+      'connecter portefeuille', 'connecter', 'lier portefeuille',
+      // Italian
+      'connetti portafoglio', 'connetti', 'collegare portafoglio',
+      // Hindi
+      'वॉलेट कनेक्ट', 'कनेक्ट करो', 'कनेक्ट',
+      // Japanese
+      'ウォレット接続', '接続', 'つなぐ',
+      // Korean
+      '지갑 연결', '연결', '지갑연결'
+    ];
+    
+    if (connectPatterns.some(pattern => lowerText.includes(pattern))) {
       return { type: 'connect', originalText: text };
     }
     
-    // Disconnect wallet commands
-    if (
-      lowerText.includes('disconnect wallet') ||
-      lowerText.includes('disconnect my wallet') ||
-      lowerText.includes('wallet disconnect') ||
-      lowerText.includes('disconnect') ||
-      lowerText.includes('वॉलेट डिस्कनेक्ट') ||
-      lowerText.includes('डिस्कनेक्ट करो') ||
-      lowerText.includes('डिस्कनेक्ट') ||
-      lowerText.includes('logout') ||
-      lowerText.includes('log out')
-    ) {
+    // Disconnect wallet commands (multilingual)
+    const disconnectPatterns = [
+      // English
+      'disconnect wallet', 'disconnect', 'logout', 'log out',
+      // Spanish
+      'desconectar billetera', 'desconectar', 'cerrar sesión',
+      // German
+      'wallet trennen', 'trennen', 'abmelden',
+      // Portuguese
+      'desconectar carteira', 'desconectar', 'sair',
+      // French
+      'déconnecter portefeuille', 'déconnecter', 'se déconnecter',
+      // Italian
+      'disconnetti portafoglio', 'disconnetti', 'esci',
+      // Hindi
+      'वॉलेट डिस्कनेक्ट', 'डिस्कनेक्ट', 'लॉगआउट',
+      // Japanese
+      'ウォレット切断', '切断', 'ログアウト',
+      // Korean
+      '지갑 연결해제', '연결해제', '로그아웃'
+    ];
+    
+    if (disconnectPatterns.some(pattern => lowerText.includes(pattern))) {
       return { type: 'disconnect', originalText: text };
     }
     
-    // Balance check commands
-    if (
-      lowerText.includes('check balance') ||
-      lowerText.includes('check my balance') ||
-      lowerText.includes('show balance') ||
-      lowerText.includes('my balance') ||
-      lowerText.includes('balance check') ||
-      lowerText.includes('balance') ||
-      lowerText.includes('बैलेंस चेक') ||
-      lowerText.includes('मेरा बैलेंस') ||
-      lowerText.includes('बैलेंस दिखाओ') ||
-      lowerText.includes('बैलेंस') ||
-      lowerText.includes('check') ||
-      lowerText.includes('चेक')
-    ) {
+    // Balance check commands (multilingual)
+    const balancePatterns = [
+      // English
+      'check balance', 'show balance', 'my balance', 'balance',
+      // Spanish
+      'verificar saldo', 'mostrar saldo', 'mi saldo', 'saldo',
+      // German
+      'guthaben prüfen', 'saldo anzeigen', 'mein guthaben', 'guthaben',
+      // Portuguese
+      'verificar saldo', 'mostrar saldo', 'meu saldo', 'saldo',
+      // French
+      'vérifier solde', 'afficher solde', 'mon solde', 'solde',
+      // Italian
+      'controlla saldo', 'mostra saldo', 'il mio saldo', 'saldo',
+      // Hindi
+      'बैलेंस चेक', 'मेरा बैलेंस', 'बैलेंस दिखाओ', 'बैलेंस',
+      // Japanese
+      '残高確認', '残高表示', '私の残高', '残高',
+      // Korean
+      '잔액 확인', '잔액 보기', '내 잔액', '잔액'
+    ];
+    
+    if (balancePatterns.some(pattern => lowerText.includes(pattern))) {
       return { type: 'balance', originalText: text };
     }
     
-    // Account/address commands
-    if (
-      lowerText.includes('show my account') ||
-      lowerText.includes('show account') ||
-      lowerText.includes('my account') ||
-      lowerText.includes('wallet address') ||
-      lowerText.includes('show address') ||
-      lowerText.includes('my address') ||
-      lowerText.includes('account') ||
-      lowerText.includes('मेरा अकाउंट') ||
-      lowerText.includes('अकाउंट दिखाओ') ||
-      lowerText.includes('मेरा पता') ||
-      lowerText.includes('अकाउंट')
-    ) {
+    // Account/address commands (multilingual)
+    const accountPatterns = [
+      // English
+      'show account', 'my account', 'wallet address', 'show address', 'account',
+      // Spanish
+      'mostrar cuenta', 'mi cuenta', 'dirección de billetera', 'cuenta',
+      // German
+      'konto anzeigen', 'mein konto', 'wallet-adresse', 'konto',
+      // Portuguese
+      'mostrar conta', 'minha conta', 'endereço da carteira', 'conta',
+      // French
+      'afficher compte', 'mon compte', 'adresse portefeuille', 'compte',
+      // Italian
+      'mostra account', 'il mio account', 'indirizzo portafoglio', 'account',
+      // Hindi
+      'मेरा अकाउंट', 'अकाउंट दिखाओ', 'वॉलेट पता', 'अकाउंट',
+      // Japanese
+      'アカウント表示', '私のアカウント', 'ウォレットアドレス', 'アカウント',
+      // Korean
+      '계정 보기', '내 계정', '지갑 주소', '계정'
+    ];
+    
+    if (accountPatterns.some(pattern => lowerText.includes(pattern))) {
       return { type: 'account', originalText: text };
     }
     
-    // Send ETH commands - Enhanced parsing
-    if (
-      lowerText.includes('send') ||
-      lowerText.includes('transfer') ||
-      lowerText.includes('भेजो') ||
-      lowerText.includes('ट्रांसफर') ||
-      lowerText.includes('pay') ||
-      lowerText.includes('payment')
-    ) {
-      // Multiple regex patterns for amount extraction
+    // Send ETH commands (multilingual with enhanced parsing)
+    const sendPatterns = [
+      // English
+      'send', 'transfer', 'pay',
+      // Spanish
+      'enviar', 'transferir', 'pagar',
+      // German
+      'senden', 'überweisen', 'bezahlen',
+      // Portuguese
+      'enviar', 'transferir', 'pagar',
+      // French
+      'envoyer', 'transférer', 'payer',
+      // Italian
+      'invia', 'trasferisci', 'paga',
+      // Hindi
+      'भेजो', 'ट्रांसफर', 'पेमेंट',
+      // Japanese
+      '送信', '転送', '支払い',
+      // Korean
+      '보내기', '전송', '지불'
+    ];
+    
+    if (sendPatterns.some(pattern => lowerText.includes(pattern))) {
+      // Enhanced amount extraction with multilingual support
       const amountPatterns = [
-        /([0-9]+\.?[0-9]*)\s*(eth|ether|ईटीएच)/i,
-        /([0-9]+\.?[0-9]*)\s*(?=\s*to\s*0x)/i,
-        /([0-9]+\.?[0-9]*)\s*(?=\s*भेजो)/i,
-        /send\s*([0-9]+\.?[0-9]*)/i,
+        /([0-9]+\.?[0-9]*)\s*(eth|ether|ईटीएच|イーサ|이더)/i,
+        /([0-9]+\.?[0-9]*)\s*(?=\s*(to|a|para|an|à|verso|को|に|에게)\s*0x)/i,
         /([0-9]+\.?[0-9]*)\s*(?=.*0x)/i,
-        /([0-9]+\.?[0-9]*)/i // Fallback for any number
+        /(send|enviar|senden|envoyer|invia|भेजो|送信|보내기)\s*([0-9]+\.?[0-9]*)/i,
+        /([0-9]+\.?[0-9]*)/i
       ];
       
       let amount: number | undefined;
       for (const pattern of amountPatterns) {
         const match = lowerText.match(pattern) || text.match(pattern);
         if (match) {
-          amount = parseFloat(match[1]);
-          break;
+          const amountStr = match[2] || match[1];
+          amount = parseFloat(amountStr);
+          if (!isNaN(amount)) break;
         }
       }
       
       // Enhanced address extraction
       const addressPatterns = [
         /0x[a-fA-F0-9]{40,42}/,
-        /to\s*(0x[a-fA-F0-9]{40,42})/i,
+        /(to|a|para|an|à|verso|को|に|에게)\s*(0x[a-fA-F0-9]{40,42})/i,
         /(0x[a-fA-F0-9]{40})/i
       ];
       
@@ -162,7 +217,7 @@ export const useVoiceRecognition = () => {
       for (const pattern of addressPatterns) {
         const match = text.match(pattern);
         if (match) {
-          address = match[0].startsWith('to') ? match[1] : match[0];
+          address = match[0].startsWith('0x') ? match[0] : match[2];
           break;
         }
       }
@@ -180,7 +235,7 @@ export const useVoiceRecognition = () => {
     return { type: 'unknown', originalText: text };
   }, []);
 
-  // Auto-restart function with better error handling
+  // Auto-restart function
   const restartRecognition = useCallback(() => {
     if (isRestartingRef.current || !recognitionRef.current) return;
     
@@ -200,7 +255,7 @@ export const useVoiceRecognition = () => {
       } finally {
         isRestartingRef.current = false;
       }
-    }, 300); // Faster restart
+    }, 300);
   }, [isListening]);
 
   // Initialize speech recognition
@@ -216,16 +271,10 @@ export const useVoiceRecognition = () => {
     setIsSupported(true);
     const recognition = new SpeechRecognition();
     
-    // Configure recognition
     recognition.continuous = true;
-    recognition.interimResults = false; // Disable for faster processing
+    recognition.interimResults = false;
     recognition.lang = currentLanguage;
-    recognition.maxAlternatives = 1; // Faster processing
-    
-    // Add these for better performance
-    if ('webkitSpeechRecognition' in window) {
-      (recognition as any).webkitGrammar = '';
-    }
+    recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -243,36 +292,31 @@ export const useVoiceRecognition = () => {
         }
       }
       
-      // Process final results
       if (finalTranscript.trim()) {
         const spokenText = finalTranscript.trim();
         setTranscript(spokenText);
         
-        // Clear any existing command timeout
         if (commandTimeoutRef.current) {
           clearTimeout(commandTimeoutRef.current);
         }
         
-        // Process command immediately for better UX
         commandTimeoutRef.current = setTimeout(() => {
           const command = parseVoiceCommand(spokenText);
           if (command.type !== 'unknown') {
             lastProcessedRef.current = spokenText.toLowerCase().trim();
             setLastCommand(command);
             
-            // Clear the processed command after 2 seconds
             setTimeout(() => {
               lastProcessedRef.current = '';
             }, 2000);
           }
-        }, 100); // Very fast processing
+        }, 100);
       }
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       switch (event.error) {
         case 'no-speech':
-          // Silent restart for no-speech
           restartRecognition();
           break;
         case 'audio-capture':
@@ -287,7 +331,6 @@ export const useVoiceRecognition = () => {
           restartRecognition();
           break;
         case 'aborted':
-          // Normal abort, don't show error
           break;
         default:
           restartRecognition();
@@ -296,8 +339,6 @@ export const useVoiceRecognition = () => {
 
     recognition.onend = () => {
       setIsListening(false);
-      
-      // Auto-restart if we should be listening
       if (!isRestartingRef.current) {
         restartRecognition();
       }
@@ -305,13 +346,7 @@ export const useVoiceRecognition = () => {
 
     recognitionRef.current = recognition;
 
-    // Auto-start after component mount
-    const startTimeout = setTimeout(() => {
-      startListening();
-    }, 500); // Faster startup
-
     return () => {
-      clearTimeout(startTimeout);
       if (restartTimeoutRef.current) {
         clearTimeout(restartTimeoutRef.current);
       }
@@ -322,7 +357,7 @@ export const useVoiceRecognition = () => {
         recognitionRef.current.stop();
       }
     };
-  }, [currentLanguage, restartRecognition]);
+  }, [currentLanguage, restartRecognition, parseVoiceCommand]);
 
   const startListening = useCallback(() => {
     if (!recognitionRef.current || !isSupported) {
@@ -335,7 +370,6 @@ export const useVoiceRecognition = () => {
       recognitionRef.current.start();
       setError('');
     } catch (e) {
-      // Try to restart after a delay
       setTimeout(() => {
         if (recognitionRef.current) {
           try {
