@@ -173,8 +173,8 @@ Fork the repo, suggest a feature, or open an issue.
 ## 👨‍🚀 Author
 
 **Tanmay Singh**  
-💼 [LinkedIn](https://linkedin.com/in/tanmaysingh007)  
-🐦 [Twitter](https://twitter.com/tanmaysingh007)
+💼 [LinkedIn](https://www.linkedin.com/in/tanmay-singh-228097272/)  
+🐦 [Twitter](https://x.com/TanmaySing91357)
 
 ---
 
